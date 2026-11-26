@@ -80,6 +80,7 @@ The headline line for slide 1: "One manual run took **[__] orders in [__] minute
    ```bash
    python3 research/survey/analyze.py ~/Downloads/responses.csv --interviews <number you ran> --evenings <gate-observation evenings> --charts
    ```
+0. Fastest setup: paste `research/survey/create-google-form.gs` into script.google.com and click Run. It creates this exact form. Send `research/survey/whatsapp-invite.txt` to batch and hostel groups.
 3. Optional but powerful: real Swiggy serviceability data. Sign in once in the prototype, save your hostel address in the Swiggy app, then run `node prototype/tools/serviceability-audit.js`.
 4. Rebuild the deck (see the root README). Slide 1's primary-research box fills itself from `research/survey/results.json` and `serviceability.json`.
 
