@@ -1,0 +1,10 @@
+{
+  "name": "campusrun-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CampusRun: scheduled, pooled campus delivery on Swiggy MCP. Team Syntara, Goa Institute of Management. Food for Thought 2.0.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CampusRun Ops · Unit economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; }
+    .cols { display: grid; grid-template-columns: 380px 1fr; gap: 22px; }
+    @media (max-width: 960px) { .cols { grid-template-columns: 1fr; } }
+    .panel { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; }
+    .panel h3 { margin: 4px 0 12px; font-size: 16px; }
+    .sl { margin-bottom: 14px; }
+    .sl label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+    .sl label b { color: var(--ink); }
+    .sl input { width: 100%; accent-color: var(--orange); }
+    .sl small { color: var(--muted); font-size: 11px; }
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 700px) { .kpis { grid-template-columns: 1fr 1fr; } }
+    .kpi { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; }
+    .kpi .v { font-size: 26px; font-weight: 800; margin-top: 4px; }
+    .kpi .v.pos { color: var(--green); } .kpi .v.neg { color: var(--red); }
+    .kpi .k { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+    .kpi small { color: var(--muted); font-size: 11.5px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+    td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+    .bar { display: flex; height: 30px; border-radius: 10px; overflow: hidden; margin: 8px 0 6px; font-size: 11px; font-weight: 700; color: #fff; }
+    .bar > div { display: grid; place-items: center; white-space: nowrap; overflow: hidden; }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--ink-2); }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
+    @media (max-width: 960px) { .grid-2 { grid-template-columns: 1fr; } }
+    .seg { display: inline-flex; background: #f1f1f4; border-radius: 12px; padding: 4px; margin-bottom: 14px; }
+    .seg button { border: 0; background: none; padding: 7px 12px; border-radius: 9px; font-weight: 700; font-size: 13px; color: var(--ink-2); }
+    .seg button.on { background: #fff; color: var(--orange); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .note { font-size: 11.5px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="logo">CR</div><div><div class="brand-name">CampusRun <span>Ops</span></div><div class="brand-sub">Run manifests, Campus Captain hand-off and live unit economics · Team Syntara, GIM</div></div></div>
+    <div class="controls"><a class="ops-link" href="index.html">← Student app</a></div>
+  </header>
+  <div class="wrap">
+    <div class="seg" id="seg"><button data-p="remote" class="on">Remote campus (GIM-type)</button><button data-p="gated">Gated city campus</button></div>
+    <div class="cols">
+      <div class="panel">
+        <h3>Run assumptions</h3>
+        <div id="sliders"></div>
+        <div class="note">All inputs are planning assumptions to be checked in the pilot. Commission and platform fee are conservative stand-ins, not Swiggy's actual numbers.</div>
+      </div>
+      <div>
+        <div class="kpis">
+          <div class="kpi"><div class="k">Contribution / run</div><div class="v" id="kRun"></div><small id="kRunS"></small></div>
+          <div class="kpi"><div class="k">Contribution / order</div><div class="v" id="kOrd"></div><small>after delivery cost</small></div>
+          <div class="kpi"><div class="k">Break-even fill</div><div class="v" id="kBe"></div><small>orders per run</small></div>
+          <div class="kpi"><div class="k">Student saves</div><div class="v pos" id="kSave"></div><small id="kSaveS"></small></div>
+        </div>
+        <div class="panel" style="margin-top:16px">
+          <h3>Where each run's money goes</h3>
+          <div class="bar" id="bar"></div>
+          <div class="legend" id="legend"></div>
+          <table style="margin-top:12px" id="pl"></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Scale view (illustrative)</h3>
+        <table id="scale"></table>
+        <div class="note">Orders/year = campuses × runs/day × orders/run × 300 operating days. GOV = orders × AOV.</div>
+      </div>
+      <div class="panel">
+        <h3>Tonight's run manifest · Dinner Run 8:30 PM</h3>
+        <table id="manifest"></table>
+        <div class="note">Campus Captain (paid student gig) checks the OTP at the drop point. Riders never enter hostels, which matches campus safety rules.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const PRESETS = {
+  remote: { orders: 30, aov: 300, comm: 18, runFee: 15, platform: 15, vehicle: 1100, captain: 150, pg: 2, incentive: 10, odDelivery: 0, odSmall: 0, label: "Vehicle round trip (≈60 km)" },
+  gated:  { orders: 25, aov: 280, comm: 18, runFee: 15, platform: 15, vehicle: 450,  captain: 150, pg: 2, incentive: 10, odDelivery: 38, odSmall: 25, label: "Rider batch trip (≈6 km)" },
+};
+const DEFS = [
+  ["orders", "Orders per run", 8, 60, 1, ""],
+  ["aov", "Average order value (₹)", 150, 600, 10, "₹"],
+  ["comm", "Restaurant commission (%)", 10, 30, 1, "%"],
+  ["runFee", "CampusRun fee per order (₹)", 0, 40, 1, "₹"],
+  ["platform", "Platform fee per order (₹)", 0, 20, 1, "₹"],
+  ["vehicle", "VEHICLE", 200, 2500, 50, "₹"],
+  ["captain", "Campus Captain per run (₹)", 0, 400, 10, "₹"],
+  ["pg", "Payment gateway (% of GOV)", 0, 3, 0.5, "%"],
+  ["incentive", "Student incentive per order (₹)", 0, 40, 1, "₹"],
+];
+let P = "remote", V = { ...PRESETS.remote };
+const inr = (n) => (n < 0 ? "−₹" : "₹") + Math.abs(Math.round(n)).toLocaleString("en-IN");
+const cr = (n) => "₹" + (n / 1e7).toFixed(1) + " Cr";
+
+function sliders() {
+  document.getElementById("sliders").innerHTML = DEFS.map(([k, l, mn, mx, st, u]) => {
+    const label = l === "VEHICLE" ? PRESETS[P].label + " (₹)" : l;
+    return `<div class="sl"><label>${label}<b id="v-${k}"></b></label><input type="range" min="${mn}" max="${mx}" step="${st}" value="${V[k]}" data-k="${k}"></div>`;
+  }).join("");
+  document.querySelectorAll("#sliders input").forEach((i) => i.oninput = () => { V[i.dataset.k] = Number(i.value); calc(); });
+}
+function calc() {
+  DEFS.forEach(([k, , , , , u]) => document.getElementById("v-" + k).textContent = u === "₹" ? "₹" + V[k] : V[k] + (u === "%" ? "%" : ""));
+  const gov = V.orders * V.aov;
+  const comm = gov * V.comm / 100, fee = V.orders * V.runFee, plat = V.orders * V.platform;
+  const rev = comm + fee + plat;
+  const pg = gov * V.pg / 100, inc = V.orders * V.incentive;
+  const cost = V.vehicle + V.captain + pg + inc;
+  const contrib = rev - cost;
+  const perOrderMargin = V.aov * V.comm / 100 + V.runFee + V.platform - V.aov * V.pg / 100 - V.incentive;
+  const be = Math.ceil((V.vehicle + V.captain) / perOrderMargin);
+  const set = (id, t, cls) => { const e = document.getElementById(id); e.textContent = t; if (cls !== undefined) e.className = "v " + cls; };
+  set("kRun", inr(contrib), contrib >= 0 ? "pos" : "neg");
+  document.getElementById("kRunS").textContent = "on " + inr(gov) + " GOV";
+  set("kOrd", inr(contrib / V.orders), contrib >= 0 ? "pos" : "neg");
+  set("kBe", perOrderMargin > 0 ? be : "n/a");
+  if (P === "gated") {
+    const od = V.odDelivery + V.odSmall;
+    set("kSave", inr(od - V.runFee) + "/order");
+    document.getElementById("kSaveS").textContent = "vs ₹" + od + " delivery + small-cart fee";
+  } else {
+    set("kSave", "Access");
+    document.getElementById("kSaveS").textContent = "0 → 3 delivery slots a day";
+  }
+  const parts = [["Vehicle", V.vehicle, "#1b1b1f"], ["Captain", V.captain, "#4a4a55"], ["Gateway", pg, "#8a8a96"], ["Incentives", inc, "#c2187f"], ["Contribution", Math.max(contrib, 0), "#0e8a5f"]];
+  const tot = parts.reduce((a, b) => a + b[1], 0) || 1;
+  document.getElementById("bar").innerHTML = parts.map(([n, v, c]) => `<div style="width:${v / tot * 100}%;background:${c}">${v / tot > .09 ? inr(v) : ""}</div>`).join("");
+  document.getElementById("legend").innerHTML = parts.map(([n, v, c]) => `<span><i style="background:${c}"></i>${n}</span>`).join("");
+  document.getElementById("pl").innerHTML = `<tr><th>Line</th><th class="n">Per run</th><th class="n">Per order</th></tr>` + [
+    ["Gross order value", gov], ["Commission", comm], ["CampusRun fee", fee], ["Platform fee", plat], ["<b>Swiggy revenue</b>", rev],
+    ["Vehicle / rider", -V.vehicle], ["Campus Captain", -V.captain], ["Payment gateway", -pg], ["Student incentives", -inc], ["<b>Contribution</b>", contrib],
+  ].map(([n, v]) => `<tr><td>${n}</td><td class="n">${inr(v)}</td><td class="n">${inr(v / V.orders)}</td></tr>`).join("");
+  const runsDay = 3;
+  const stages = [["Pilot (Goa, 90 days)", 3], ["Phase 2 (6 months)", 50], ["Year 1", 150], ["Year 3", 1000]];
+  document.getElementById("scale").innerHTML = `<tr><th>Stage</th><th class="n">Campuses</th><th class="n">Orders / yr</th><th class="n">GOV / yr</th><th class="n">Contribution / yr</th></tr>` +
+    stages.map(([n, c]) => { const o = c * runsDay * V.orders * 300; return `<tr><td>${n}</td><td class="n">${c}</td><td class="n">${(o / 1e5).toFixed(1)} L</td><td class="n">${cr(o * V.aov)}</td><td class="n">${cr(o * contrib / V.orders)}</td></tr>`; }).join("");
+}
+const MAN = [["SWG-4101", "Coastal Biryani Co.", 4, "Shelf B-03", "Ready"], ["SWG-4102", "Slice Republic Pizza", 5, "Shelf B-04", "Ready"], ["SWG-4103", "Green Bowl Kitchen", 2, "Shelf B-05", "Prepping"], ["SWG-4104", "Coastal Biryani Co.", 1, "Shelf B-06", "Prepping"], ["SWG-4105", "Momo Station", 3, "Shelf B-07", "Ready"]];
+document.getElementById("manifest").innerHTML = `<tr><th>Order</th><th>Restaurant</th><th class="n">Pod size</th><th>Shelf</th><th>Status</th></tr>` +
+  MAN.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="n">${r[2]}</td><td>${r[3]}</td><td><span class="pill ${r[4] === "Ready" ? "green" : ""}">${r[4]}</span></td></tr>`).join("") +
+  `<tr><td colspan="5" style="color:var(--muted)">+ 26 more orders · 31 / 40 capacity · vehicle leaves the Panaji hub at 7:50 PM</td></tr>`;
+document.querySelectorAll("#seg button").forEach((b) => b.onclick = () => { P = b.dataset.p; V = { ...PRESETS[P] }; document.querySelectorAll("#seg button").forEach((x) => x.classList.toggle("on", x === b)); sliders(); calc(); });
+sliders(); calc();
+</script>
+</body>
+</html>

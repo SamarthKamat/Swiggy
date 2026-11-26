@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CampusRun · Swiggy prototype by Team Syntara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">CR</div>
+      <div>
+        <div class="brand-name">CampusRun <span>by Swiggy</span></div>
+        <div class="brand-sub">Scheduled, pooled delivery to the hostel, not just the gate · Team Syntara, GIM</div>
+      </div>
+    </div>
+    <div class="controls">
+      <label class="ctl">Campus
+        <select id="campusSel">
+          <option value="gim">GIM · Poriem (remote)</option>
+          <option value="city">City campus (gated)</option>
+        </select>
+      </label>
+      <label class="ctl">MCP mode
+        <select id="modeSel">
+          <option value="mock">Demo (offline)</option>
+          <option value="live">Live Swiggy MCP</option>
+        </select>
+      </label>
+      <a class="ops-link" href="ops.html">Ops &amp; Economics →</a>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" id="screen"></div>
+        <nav class="tabbar" id="tabbar">
+          <button data-tab="home" class="active"><span class="ic">⌂</span>Home</button>
+          <button data-tab="captain"><span class="ic">✦</span>Captain</button>
+          <button data-tab="pod"><span class="ic">◎</span>Pod</button>
+          <button data-tab="track"><span class="ic">➜</span>Track</button>
+          <button data-tab="outing"><span class="ic">☾</span>Outing</button>
+        </nav>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="journey" id="journey">
+        <div class="eyebrow">Core user journey</div>
+        <ol id="journeySteps">
+          <li data-step="home">See the next CampusRun slot</li>
+          <li data-step="captain">Ask Run Captain (AI) to plan within budget</li>
+          <li data-step="pod">Pool with the hostel wing &amp; split</li>
+          <li data-step="track">Track the run to the drop point, collect with an OTP</li>
+          <li data-step="outing">Weekend: Dineout booking with student offer</li>
+        </ol>
+      </div>
+      <div class="trace">
+        <div class="trace-head">
+          <div><span class="dot"></span> MCP trace <small id="modeBadge">demo transport</small></div>
+          <button id="clearTrace">clear</button>
+        </div>
+        <div class="trace-body" id="trace"><div class="trace-empty">Swiggy MCP tool calls show up here as you use the app.</div></div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="mcp.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
