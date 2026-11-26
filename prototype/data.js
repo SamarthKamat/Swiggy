@@ -27,9 +27,9 @@ window.DEMO = {
   },
 
   slots: [
-    { id: "lunch", label: "Lunch Run", time: "1:15 PM", closesMin: 45, cluster: "Mapusa–Bicholim", capacity: 40 },
-    { id: "dinner", label: "Dinner Run", time: "8:30 PM", closesMin: 45, cluster: "Panaji–Porvorim", capacity: 40 },
-    { id: "midnight", label: "Midnight Run", time: "11:45 PM", closesMin: 40, cluster: "Mapusa", capacity: 30 },
+    { id: "lunch", label: "Lunch Run", time: "1:15 PM", closesMin: 45, cluster: "Mapusa–Bicholim", capacity: 40, hub: { latitude: 15.5915, longitude: 73.8091 } },
+    { id: "dinner", label: "Dinner Run", time: "8:30 PM", closesMin: 45, cluster: "Panaji–Porvorim", capacity: 40, hub: { latitude: 15.4909, longitude: 73.8278 } },
+    { id: "midnight", label: "Midnight Run", time: "11:45 PM", closesMin: 40, cluster: "Mapusa", capacity: 30, hub: { latitude: 15.5915, longitude: 73.8091 } },
   ],
 
   restaurants: [
@@ -87,6 +87,9 @@ window.DEMO = {
     { id: "i4", name: "Instant Coffee Sachets (10)", price: 60 },
     { id: "i5", name: "Bananas (6 pc)", price: 48 },
   ],
+
+  // Dineout searches around Panaji city centre (the batch's usual weekend outing)
+  outingCentre: { latitude: 15.4909, longitude: 73.8278, label: "Panaji" },
 
   dineout: [
     { id: "d1", name: "Riverside Shack (demo)", area: "Panaji", costForTwo: 1200, studentOff: 20, slots: ["7:00 PM", "7:30 PM", "8:30 PM"] },

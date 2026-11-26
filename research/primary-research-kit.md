@@ -1,6 +1,6 @@
 # CampusRun: primary research kit (campus-level validation)
 
-The brief requires at least one form of campus-level validation, and slide 1 has four orange `[__]` boxes waiting for **your real numbers**. This kit gives you everything needed to collect them at GIM in 3–4 days. Do not submit with placeholders, and do not estimate them.
+The brief requires at least one form of campus-level validation, and slide 1 has orange `[__]` boxes waiting for **your real numbers**. This kit gives you everything needed to collect them at GIM in 2–3 days (registration closes 7 Dec, submission 22 Dec). The analysis script fills the deck automatically.
 
 Run **at least two** of the four methods. Survey + smoke test is the strongest pair, because one shows stated demand and the other shows real behaviour.
 
@@ -72,6 +72,18 @@ Run a manual "CampusRun" once:
 The headline line for slide 1: "One manual run took **[__] orders in [__] minutes**; cost per order fell from ₹[__] to ₹[__]."
 
 ---
+
+## From responses to the deck in one command
+
+1. Google Form → Responses → **Download responses (.csv)**. Keep the question wording above; the script matches columns by it.
+2. Run:
+   ```bash
+   python3 research/survey/analyze.py ~/Downloads/responses.csv --interviews <number you ran> --evenings <gate-observation evenings> --charts
+   ```
+3. Optional but powerful: real Swiggy serviceability data. Sign in once in the prototype, save your hostel address in the Swiggy app, then run `node prototype/tools/serviceability-audit.js`.
+4. Rebuild the deck (see the root README). Slide 1's primary-research box fills itself from `research/survey/results.json` and `serviceability.json`.
+
+The script reports the true sample size `n`. Report it exactly as it comes out. Judges ask about methodology, and real data with a modest n beats a big number you can't defend.
 
 ## Ethics and consent
 Tell respondents why you are asking, keep responses anonymous, and do not publish raw data. Competition rules forbid publishing the prototype or materials without Swiggy's approval.

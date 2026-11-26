@@ -7,6 +7,9 @@ const { applyTheme } = require(process.argv[2]);
 const ROOT = path.join(__dirname, "..");
 const A = (f) => path.join(ROOT, "assets", f);
 const OUT = path.join(__dirname, "CampusRun_TeamSyntara_GIM.pptx");
+const readJson = (f) => { try { return JSON.parse(require("fs").readFileSync(path.join(ROOT, "research", "survey", f), "utf8")); } catch { return null; } };
+const SURVEY = readJson("results.json");     // real GIM survey results from analyze.py
+const AUDIT = readJson("serviceability.json"); // real Swiggy MCP serviceability audit
 
 const THEME = {
   name: "CampusRun",
@@ -105,11 +108,26 @@ pres.addSection({ title: "Campus Insight" });
   // Column 3: primary research + insight
   box(s, 9.3, 1.6, 3.58, 2.95, WHITE, { line: { color: ORANGE, width: 1.25, dashType: "dash" } });
   txt(s, "PRIMARY RESEARCH · GIM", { x: 9.5, y: 1.75, w: 3.2, h: 0.25, fontSize: 10, bold: true, color: ORANGE, charSpacing: 1 });
-  txt(s, "Survey (n = [__]) + [__] interviews + gate observation over [__] evenings", { x: 9.5, y: 2.02, w: 3.2, h: 0.45, fontSize: 10, color: INK2 });
-  const pr = [["[__]%", "tried ordering to campus and failed, or gave up"], ["[__] min", "average walk + wait to collect a delivery"], ["[__]%", "would order from a fixed slot to save ₹40+ a meal"]];
+  // Filled automatically from research/survey/results.json (analyze.py) and serviceability.json
+  // (prototype/tools/serviceability-audit.js). Until those exist the slide shows [__] blanks.
+  const v = (x, suf = "") => (x === null || x === undefined ? "[__]" + suf : x + suf);
+  const method = SURVEY
+    ? `Survey of ${SURVEY.n} GIM students${SURVEY.interviews ? ` + ${SURVEY.interviews} interviews` : ""}${SURVEY.evenings ? ` + gate observation over ${SURVEY.evenings} evening${SURVEY.evenings === 1 ? "" : "s"}` : ""}`
+    : "Survey (n = [__]) + [__] interviews + gate observation over [__] evenings";
+  txt(s, method, { x: 9.5, y: 2.02, w: 3.2, h: 0.45, fontSize: 10, color: INK2 });
+  const pr = [
+    [v(SURVEY && SURVEY.pct_failed_or_gave_up, "%"), "tried ordering to campus and failed, or gave up"],
+    [v(SURVEY && SURVEY.median_walk_wait_min, " min"), "median walk + wait to collect a delivery"],
+    [v(SURVEY && SURVEY.pct_would_use_fixed_slot, "%"), "would order from a fixed slot to save ₹40+ a meal"],
+  ];
+  if (AUDIT) {
+    const camp = AUDIT.results.find((r) => r.label === AUDIT.campusLabel) || AUDIT.results[0];
+    const city = AUDIT.results.find((r) => /panaji/i.test(r.label));
+    if (camp && city) pr[0] = [`${camp.total} vs ${city.total}`, "Swiggy restaurant results at our hostel vs Panaji (MCP audit)"];
+  }
   pr.forEach(([n, l], i) => {
     const y = 2.58 + i * 0.63;
-    txt(s, n, { x: 9.5, y, w: 1.2, h: 0.5, fontSize: 18, bold: true, color: ORANGE, valign: "middle" });
+    txt(s, n, { x: 9.5, y, w: 1.2, h: 0.5, fontSize: n.length > 7 ? 14 : 18, bold: true, color: ORANGE, valign: "middle" });
     txt(s, l, { x: 10.72, y, w: 2.0, h: 0.5, fontSize: 10, color: INK2, valign: "middle" });
   });
 
@@ -121,7 +139,7 @@ pres.addSection({ title: "Campus Insight" });
   ], { x: 9.5, y: 5.13, w: 3.2, h: 1.5, fontSize: 11.5 });
 
   source(s, "Sources: PIB / Ministry of Education AISHE release; Business Today and Inc42 on Swiggy platform fee (Mar 2026); SRMIST food-waste survey; Change.org petition to extend Blinkit to GIM; Anna University gate rule (News Arena India); IGGMCH Nagpur (Careers360, Oct 2025); Rome2rio (GIM to Panaji 30.6 km).");
-  s.addNotes("Campus Insight. Secondary evidence: AISHE (Ministry of Education / PIB): 43% of universities and 61.4% of colleges are located in rural areas; 4.33 crore enrolment in 2021-22. Swiggy platform fee went from Rs 2 (Apr 2023) to Rs 17.58 incl. GST (Mar 2026), per Business Today and Inc42. SRMIST survey of 1,800+ students: poor quality cited by 86.4% as the reason for wasting mess food. Gate rules: Anna University allows delivery executives only up to the gate; IGGMCH Nagpur limited delivery agents to the security post outside hostels (Oct 2025); EFLU students protested delivery restrictions. GIM's Poriem campus is 30.6 km by road from Panaji (Rome2rio); a Change.org petition asks Blinkit to extend delivery to GIM. FILL IN the primary research boxes with your own GIM survey results before submitting.");
+  s.addNotes("Campus Insight. Secondary evidence: AISHE (Ministry of Education / PIB): 43% of universities and 61.4% of colleges are located in rural areas; 4.33 crore enrolment in 2021-22. Swiggy platform fee went from Rs 2 (Apr 2023) to Rs 17.58 incl. GST (Mar 2026), per Business Today and Inc42. SRMIST survey of 1,800+ students: poor quality cited by 86.4% as the reason for wasting mess food. Gate rules: Anna University allows delivery executives only up to the gate; IGGMCH Nagpur limited delivery agents to the security post outside hostels (Oct 2025); EFLU students protested delivery restrictions. GIM's Poriem campus is 30.6 km by road from Panaji (Rome2rio); a Change.org petition asks Blinkit to extend delivery to GIM. Primary research boxes are filled from research/survey/results.json (real survey) and serviceability.json (Swiggy MCP audit).");
 }
 
 // ======================= SLIDE 2 · SOLUTION =======================
@@ -173,7 +191,7 @@ pres.addSection({ title: "Proposed Solution" });
   ], { x: 9.02, y: 5.32, w: 3.7, h: 1.3, fontSize: 10.5 });
 
   source(s, "Sources: Swiggy Campus Streaks release (PR Newswire, Sep 2025); Swiggy Student Rewards (Tribune / UNI); Swiggy EatRight campus growth (Mediainfoline, Nov 2025); Swiggy MCP launch (Swiggy corporate, Jan 2026) and Builders Club docs.");
-  s.addNotes("Solution. CampusRun adds a scheduled, batched fulfilment mode for campuses Swiggy tags remote or gated. It reuses existing Swiggy assets: Campus Streaks (4,800+ campuses in 310 cities, Sep 2025), Student Rewards (3 lakh+ enrolments), Dineout student offer (20% off bills over Rs 799), Instamart, and Swiggy MCP (Food, Instamart, Dineout servers). Run Captain is an AI agent built on MCP tools: search_restaurants, get_restaurant_menu, update_food_cart, place_food_order, track_food_order; Instamart search + cart; Dineout book_table.");
+  s.addNotes("Solution. CampusRun adds a scheduled, batched fulfilment mode for campuses Swiggy tags remote or gated. It reuses existing Swiggy assets: Campus Streaks (4,800+ campuses in 310 cities, Sep 2025), Student Rewards (3 lakh+ enrolments), Dineout student offer (20% off bills over Rs 799), Instamart, and Swiggy MCP (Food, Instamart, Dineout servers). Run Captain is an AI agent built on the live Swiggy MCP tools (OAuth 2.1 sign-in): Food get_addresses, search_restaurants, get_restaurant_menu, update_food_cart, get_food_cart, place_food_order, track_food_order; Instamart search_products, update_cart; Dineout search_restaurants_dineout, get_available_slots, book_table.");
 }
 
 // ======================= SLIDE 3 · USER JOURNEY =======================
@@ -189,18 +207,18 @@ pres.addSection({ title: "User Journey" });
   ];
   phones.forEach(([img, n, t, d], i) => {
     const x = 0.45 + i * 2.05;
-    s.addImage({ path: A(img), x: x + 0.05, y: 1.58, w: 1.8, h: 3.69, objectName: oid("phone"), altText: "CampusRun prototype screen: " + t });
-    circleNum(s, n, x + 0.02, 5.38, 0.32);
-    txt(s, t, { x: x + 0.4, y: 5.38, w: 1.55, h: 0.32, fontSize: 11.5, bold: true, valign: "middle" });
-    txt(s, d, { x: x + 0.02, y: 5.74, w: 1.9, h: 0.5, fontSize: 9.5, color: INK2 });
+    s.addImage({ path: A(img), x: x + 0.1, y: 1.58, w: 1.7, h: 3.49, objectName: oid("phone"), altText: "CampusRun prototype screen: " + t });
+    circleNum(s, n, x + 0.02, 5.16, 0.32);
+    txt(s, t, { x: x + 0.4, y: 5.16, w: 1.55, h: 0.32, fontSize: 11.5, bold: true, valign: "middle" });
+    txt(s, d, { x: x + 0.02, y: 5.52, w: 1.9, h: 0.45, fontSize: 9.5, color: INK2 });
   });
 
   // MCP strip
-  box(s, 0.45, 6.28, 8.1, 0.48, INK);
+  box(s, 0.45, 6.02, 8.1, 0.72, INK);
   txt(s, [
     { text: "SWIGGY MCP  ", options: { color: ORANGE, bold: true } },
-    { text: "search_restaurants → get_restaurant_menu → update_food_cart → place_food_order → track_food_order  ·  Instamart cart  ·  Dineout book_table", options: { color: WHITE } },
-  ], { x: 0.62, y: 6.28, w: 7.8, h: 0.48, fontSize: 9.5, valign: "middle", fontFace: "Arial" });
+    { text: "Food: get_addresses → search_restaurants → get_restaurant_menu → update_food_cart → get_food_cart → place_food_order → track_food_order  ·  Instamart: search_products, update_cart  ·  Dineout: search_restaurants_dineout, get_available_slots, book_table", options: { color: WHITE } },
+  ], { x: 0.62, y: 6.02, w: 7.8, h: 0.72, fontSize: 9.5, valign: "middle", fontFace: "Arial" });
 
   // stakeholders
   txt(s, "Who gains, and how", { x: 8.85, y: 1.6, w: 4, h: 0.3, fontSize: 13, bold: true });

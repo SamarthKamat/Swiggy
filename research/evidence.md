@@ -57,10 +57,11 @@ Every number in the deck traces to a row below. The facts were gathered from web
 
 ## 7. Swiggy MCP (prototype requirement)
 
+Checked directly against the Swiggy Builders Club docs (`mcp.swiggy.com/builders`, Nov 2026).
+
 | Fact | Source |
 |---|---|
-| Swiggy MCP servers for Food, Instamart and Dineout; ordering from ChatGPT, Claude and Gemini (Jan 2026) | Swiggy corporate: https://www.swiggy.com/corporate/?p=16731 · India TV: https://www.indiatvnews.com/technology/news/swiggy-enables-ordering-via-chatgpt-claude-and-gemini-details-here-2026-01-28-1027737 |
-| Endpoints `mcp.swiggy.com/food`, `/im`, `/dineout`; OAuth 2.1 + PKCE | Builders Club docs: https://mcp.swiggy.com/builders/docs/start/what-is-swiggy-mcp/ |
-| Food tools: `search_restaurants`, `search_menu`, `get_restaurant_menu`, `update_food_cart`, `get_food_cart`, `place_food_order`, `track_food_order`; Dineout: `book_table` | https://mcp.swiggy.com/builders/developers/ · https://mcp.swiggy.com/builders/llms.txt |
-
-The prototype's live mode calls these tool names. Run `GET /api/tools` (see `prototype/README.md`) to print the live schemas and confirm the argument names before recording a live demo.
+| 4 MCP servers (Food, Instamart, Dineout, Scenes), 60+ tools; ordering from ChatGPT, Claude and Gemini (Jan 2026) | https://mcp.swiggy.com/builders/docs/start/what-is-swiggy-mcp/ · Swiggy corporate: https://www.swiggy.com/corporate/?p=16731 |
+| Endpoints `mcp.swiggy.com/food`, `/im`, `/dineout`; Streamable HTTP in stateless JSON mode | https://mcp.swiggy.com/builders/docs/reference/protocol/ |
+| OAuth 2.1 + PKCE with dynamic client registration; `http://localhost` redirects allowed for development; 5-day access token with refresh | https://mcp.swiggy.com/builders/docs/start/authenticate/ |
+| Tools used: Food `get_addresses`, `search_restaurants`, `get_restaurant_menu`, `update_food_cart`, `get_food_cart`, `place_food_order`, `track_food_order`; Instamart `search_products`, `update_cart`; Dineout `search_restaurants_dineout`, `get_available_slots`, `book_table` | https://mcp.swiggy.com/builders/docs/reference/ |

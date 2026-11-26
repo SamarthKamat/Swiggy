@@ -9,16 +9,17 @@
 | Part | Weight | File |
 |---|---|---|
 | Business case (5 slides) | 70% | `deck/CampusRun_TeamSyntara_GIM.pptx` (+ `.pdf`) |
-| Prototype (webapp) | 30% | `prototype/`: run with `cd prototype && node server.js` |
+| Prototype (webapp, real Swiggy MCP with sign-in) | 30% | `prototype/`: run with `cd prototype && node server.js` |
 | Video walkthrough script | part of the 30% | `video/walkthrough-script.md` |
 | Secondary research with sources | supports the 70% | `research/evidence.md` |
-| Primary research kit (survey, interviews, observation, smoke test) | **mandatory validation** | `research/primary-research-kit.md` |
+| Primary research kit + analysis script | **mandatory validation** | `research/primary-research-kit.md`, `research/survey/analyze.py` |
 
 ## Before you submit (checklist)
-1. **Run the primary research** (`research/primary-research-kit.md`) and replace the four orange `[__]` placeholders on slide 1 with your real numbers. Edit `deck/build-deck.js` and rebuild, or edit the `.pptx` directly.
-2. Open each source link in `research/evidence.md` and confirm the figures.
-3. Record the video following `video/walkthrough-script.md`.
-4. Don't publish the prototype or deck publicly. The competition rules require Swiggy's prior approval.
+1. **Run the primary research** (`research/primary-research-kit.md`): Google Form survey + interviews. Then run `python3 research/survey/analyze.py responses.csv --interviews N --evenings N` and rebuild the deck. Slide 1 fills itself with your real numbers.
+2. **Optional, strong:** sign in to Swiggy in the prototype and run `node prototype/tools/serviceability-audit.js` to put real Swiggy serviceability data (GIM hostel vs Panaji) on slide 1.
+3. Open each source link in `research/evidence.md` and confirm the figures.
+4. Record the video following `video/walkthrough-script.md`.
+5. Don't publish the prototype or deck publicly. The competition rules require Swiggy's prior approval.
 
 ## The case in five lines
 1. **Insight:** campus demand is already clustered in time (mess-off hours) and place (hostel blocks), yet it is fulfilled one order, one rider. On campus, speed is the wrong goal; predictable, pooled delivery is the right one.
