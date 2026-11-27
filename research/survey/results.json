@@ -1,0 +1,118 @@
+{
+  "n": 173,
+  "collected": "26–27 Nov 2026",
+  "programs": {
+    "PGDM (Core)": 82,
+    "PGDM – BIFS": 22,
+    "PGDM – BDA": 48,
+    "PGDM – HCM": 21
+  },
+  "on_campus_pct": 92,
+  "pct_failed_or_abandoned": 80,
+  "pct_unserviceable": 50,
+  "pct_abandoned_fees": 31,
+  "pct_ordered_with_gate_hassle": 15,
+  "median_walk_wait": "15 – 20 min",
+  "pct_wait_15plus": 57,
+  "mean_spend_per_person": 229,
+  "spend": {
+    "₹250 – ₹350": {
+      "count": 48,
+      "pct": 28
+    },
+    "Under ₹150": {
+      "count": 30,
+      "pct": 17
+    },
+    "₹150 – ₹250": {
+      "count": 79,
+      "pct": 46
+    },
+    "Above ₹350": {
+      "count": 16,
+      "pct": 9
+    }
+  },
+  "pct_would_use_fixed_slot": 79,
+  "pct_definitely_slot": 50,
+  "pct_weekly_users": 80,
+  "stated_orders_per_student_week": 1.73,
+  "biggest_frustration": {
+    "Walking to the main gate and waiting for the delivery partner": {
+      "count": 77,
+      "pct": 45
+    },
+    "Extra fees (delivery + small-cart + platform fee) inflating small orders": {
+      "count": 58,
+      "pct": 34
+    },
+    "Coordinating group orders and chasing friends for UPI splits": {
+      "count": 26,
+      "pct": 15
+    },
+    "Food arriving cold or delayed": {
+      "count": 12,
+      "pct": 7
+    }
+  },
+  "why_outside_food": {
+    "Mess menu fatigue": {
+      "count": 140,
+      "pct": 81
+    },
+    "Late-night hunger": {
+      "count": 128,
+      "pct": 74
+    },
+    "Group hangouts": {
+      "count": 113,
+      "pct": 65
+    },
+    "Craving specific cuisines": {
+      "count": 85,
+      "pct": 49
+    }
+  },
+  "order_windows": {
+    "Lunch": {
+      "count": 59,
+      "pct": 34
+    },
+    "Evening Snacks": {
+      "count": 77,
+      "pct": 45
+    },
+    "Dinner": {
+      "count": 149,
+      "pct": 86
+    },
+    "Midnight": {
+      "count": 128,
+      "pct": 74
+    }
+  },
+  "feature_pull": {
+    "Hostel Wing Pooling": {
+      "count": 134,
+      "pct": 77
+    },
+    "Adding Instamart": {
+      "count": 122,
+      "pct": 71
+    },
+    "OTP-secured drop shelf": {
+      "count": 106,
+      "pct": 61
+    },
+    "AI order planner": {
+      "count": 97,
+      "pct": 56
+    },
+    "Weekend Dineout": {
+      "count": 79,
+      "pct": 46
+    }
+  },
+  "pct_healthy_regular": 46,
+  "pct_healthy_any": 83
+}

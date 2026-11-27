@@ -147,7 +147,7 @@
   // dispatch). It is not part of Swiggy MCP today, so the prototype simulates it locally.
   const CampusRun = {
     state: {},
-    init(slots) { const fills = { lunch: 27, dinner: 31, midnight: 18 }; slots.forEach((s) => (this.state[s.id] = { orders: fills[s.id] || 10, capacity: s.capacity })); },
+    init(slots) { const fills = { evening: 22, dinner: 31, midnight: 18 }; slots.forEach((s) => (this.state[s.id] = { orders: fills[s.id] || 10, capacity: s.capacity })); },
     async joinRun(slotId, orderId, podSize) {
       const id = "cr" + Math.random().toString(36).slice(2, 7);
       emit({ id, phase: "request", server: "campusrun", tool: "join_run", args: { slotId, orderId, podSize }, endpoint: SERVERS.campusrun });

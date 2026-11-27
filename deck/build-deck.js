@@ -88,12 +88,12 @@ pres.addSection({ title: "Campus Insight" });
     ["A", "Remote campus: no access", [
       "GIM Poriem is 30.6 km by road from Panaji. Most restaurants sit outside on-demand radius.",
       "GIM students have petitioned online to bring quick-commerce delivery to campus.",
-      "Result: mess or nothing, especially after 10 PM.",
+      "74% of surveyed GIM students order out of late-night hunger, after 10 PM, when the mess is shut.",
     ]],
     ["B", "Gated campus: costly last 500 m", [
       "Anna University lets delivery executives in only up to the gate. IGGMCH Nagpur barred agents from hostels (Oct 2025).",
       "Students walk to the gate, and every small order pays its own delivery and small-cart fee.",
-      "Riders queue at gates: one trip per order.",
+      "Gate pickup is students' #1 frustration (45% in our survey). Riders queue at gates, one trip per order.",
     ]],
   ];
   arche.forEach(([k, t, bl], i) => {
@@ -107,28 +107,26 @@ pres.addSection({ title: "Campus Insight" });
 
   // Column 3: primary research + insight
   box(s, 9.3, 1.6, 3.58, 2.95, WHITE, { line: { color: ORANGE, width: 1.25, dashType: "dash" } });
-  txt(s, "PRIMARY RESEARCH · GIM", { x: 9.5, y: 1.75, w: 3.2, h: 0.25, fontSize: 10, bold: true, color: ORANGE, charSpacing: 1 });
-  // Filled automatically from research/survey/results.json (analyze.py) and serviceability.json
-  // (prototype/tools/serviceability-audit.js). Until those exist the slide shows [__] blanks.
+  txt(s, "PRIMARY RESEARCH · GIM SURVEY", { x: 9.5, y: 1.75, w: 3.2, h: 0.25, fontSize: 10, bold: true, color: ORANGE, charSpacing: 1 });
+  // Numbers come from research/survey/results.json (analyze.py on the Google Forms export).
+  const S1 = SURVEY || {};
   const v = (x, suf = "") => (x === null || x === undefined ? "[__]" + suf : x + suf);
-  const method = SURVEY
-    ? `Survey of ${SURVEY.n} GIM students${SURVEY.interviews ? ` + ${SURVEY.interviews} interviews` : ""}${SURVEY.evenings ? ` + gate observation over ${SURVEY.evenings} evening${SURVEY.evenings === 1 ? "" : "s"}` : ""}`
-    : "Survey (n = [__]) + [__] interviews + gate observation over [__] evenings";
-  txt(s, method, { x: 9.5, y: 2.02, w: 3.2, h: 0.45, fontSize: 10, color: INK2 });
+  txt(s, SURVEY ? `n = ${S1.n} GIM students · ${S1.collected}` : "Survey (n = [__])", { x: 9.5, y: 2.02, w: 3.2, h: 0.25, fontSize: 9.5, color: INK2 });
   const pr = [
-    [v(SURVEY && SURVEY.pct_failed_or_gave_up, "%"), "tried ordering to campus and failed, or gave up"],
-    [v(SURVEY && SURVEY.median_walk_wait_min, " min"), "median walk + wait to collect a delivery"],
-    [v(SURVEY && SURVEY.pct_would_use_fixed_slot, "%"), "would order from a fixed slot to save ₹40+ a meal"],
+    [v(S1.pct_failed_or_abandoned, "%"), SURVEY ? `failed or abandoned a campus order (${S1.pct_unserviceable}% "unserviceable", ${S1.pct_abandoned_fees}% fees)` : "failed or abandoned a campus order"],
+    [v(S1.median_walk_wait), "median walk + wait at the gate per delivery"],
+    [v(S1.pct_would_use_fixed_slot, "%"), "would order from a fixed slot to save ₹40+ a meal"],
+    [SURVEY ? `₹${S1.mean_spend_per_person}` : "₹[__]", "average per-person basket, which we use as AOV"],
   ];
   if (AUDIT) {
     const camp = AUDIT.results.find((r) => r.label === AUDIT.campusLabel) || AUDIT.results[0];
     const city = AUDIT.results.find((r) => /panaji/i.test(r.label));
-    if (camp && city) pr[0] = [`${camp.total} vs ${city.total}`, "Swiggy restaurant results at our hostel vs Panaji (MCP audit)"];
+    if (camp && city) pr[3] = [`${camp.total} vs ${city.total}`, "Swiggy restaurant results at our hostel vs Panaji (MCP audit)"];
   }
   pr.forEach(([n, l], i) => {
-    const y = 2.58 + i * 0.63;
-    txt(s, n, { x: 9.5, y, w: 1.2, h: 0.5, fontSize: n.length > 7 ? 14 : 18, bold: true, color: ORANGE, valign: "middle" });
-    txt(s, l, { x: 10.72, y, w: 2.0, h: 0.5, fontSize: 10, color: INK2, valign: "middle" });
+    const y = 2.36 + i * 0.53;
+    txt(s, n, { x: 9.5, y, w: 1.25, h: 0.48, fontSize: n.length > 6 ? 13 : 17, bold: true, color: ORANGE, valign: "middle" });
+    txt(s, l, { x: 10.77, y, w: 2.0, h: 0.48, fontSize: 9, color: INK2, valign: "middle" });
   });
 
   box(s, 9.3, 4.7, 3.58, 2.0, INK);
@@ -138,8 +136,8 @@ pres.addSection({ title: "Campus Insight" });
     { text: "On campus, speed is the wrong goal. Predictable, pooled delivery is the right one.", options: { color: ORANGE, bold: true } },
   ], { x: 9.5, y: 5.13, w: 3.2, h: 1.5, fontSize: 11.5 });
 
-  source(s, "Sources: PIB / Ministry of Education AISHE release; Business Today and Inc42 on Swiggy platform fee (Mar 2026); SRMIST food-waste survey; Change.org petition to extend Blinkit to GIM; Anna University gate rule (News Arena India); IGGMCH Nagpur (Careers360, Oct 2025); Rome2rio (GIM to Panaji 30.6 km).");
-  s.addNotes("Campus Insight. Secondary evidence: AISHE (Ministry of Education / PIB): 43% of universities and 61.4% of colleges are located in rural areas; 4.33 crore enrolment in 2021-22. Swiggy platform fee went from Rs 2 (Apr 2023) to Rs 17.58 incl. GST (Mar 2026), per Business Today and Inc42. SRMIST survey of 1,800+ students: poor quality cited by 86.4% as the reason for wasting mess food. Gate rules: Anna University allows delivery executives only up to the gate; IGGMCH Nagpur limited delivery agents to the security post outside hostels (Oct 2025); EFLU students protested delivery restrictions. GIM's Poriem campus is 30.6 km by road from Panaji (Rome2rio); a Change.org petition asks Blinkit to extend delivery to GIM. Primary research boxes are filled from research/survey/results.json (real survey) and serviceability.json (Swiggy MCP audit).");
+  source(s, "Sources: GIM student survey (n = 173, Nov 2026); PIB / Ministry of Education AISHE release; Business Today and Inc42 on Swiggy platform fee (Mar 2026); SRMIST food-waste survey; Change.org petition to extend Blinkit to GIM; Anna University gate rule (News Arena India); IGGMCH Nagpur (Careers360, Oct 2025); Rome2rio (GIM to Panaji 30.6 km).");
+  s.addNotes("Campus Insight. Secondary evidence: AISHE (Ministry of Education / PIB): 43% of universities and 61.4% of colleges are located in rural areas; 4.33 crore enrolment in 2021-22. Swiggy platform fee went from Rs 2 (Apr 2023) to Rs 17.58 incl. GST (Mar 2026), per Business Today and Inc42. SRMIST survey of 1,800+ students: poor quality cited by 86.4% as the reason for wasting mess food. Gate rules: Anna University allows delivery executives only up to the gate; IGGMCH Nagpur limited delivery agents to the security post outside hostels (Oct 2025); EFLU students protested delivery restrictions. GIM's Poriem campus is 30.6 km by road from Panaji (Rome2rio); a Change.org petition asks Blinkit to extend delivery to GIM. Primary research: Google Form survey of 173 GIM students, 26-27 Nov 2026 (92% hostel residents). 80% failed or abandoned a campus order: 50% saw 'unserviceable', 31% abandoned over fees. Median walk + wait at the gate 15-20 min (57% spend 15+ min). 79% would order from a fixed slot to save Rs 40+. Average per-person basket Rs 229. Biggest frustration: gate pickup 45%, fees 34%. Ordering windows: dinner 86%, late night 74%, evening snacks 45%, lunch 34%.");
 }
 
 // ======================= SLIDE 2 · SOLUTION =======================
@@ -150,14 +148,14 @@ pres.addSection({ title: "Proposed Solution" });
   box(s, 0.45, 1.6, 8.1, 0.95, SOFT);
   txt(s, [
     { text: "Swiggy CampusRun  ", options: { bold: true, color: ORANGE, fontSize: 17 } },
-    { text: "Three fixed delivery slots a day (Lunch · Dinner · Midnight) per campus. Orders close 45 minutes before the run, restaurants prep to the slot, and one vehicle carries the whole run to an OTP drop point inside campus.", options: { color: INK2, fontSize: 11.5 } },
+    { text: "Three fixed delivery slots a day (Evening · Dinner · Midnight) per campus. Orders close 45 minutes before the run, restaurants prep to the slot, and one vehicle carries the whole run to an OTP drop point inside campus.", options: { color: INK2, fontSize: 11.5 } },
   ], { x: 0.7, y: 1.72, w: 7.7, h: 0.75, valign: "middle" });
 
   const pillars = [
-    ["1", "Scheduled Runs", "Orders batch by restaurant cluster into 3 daily slots. A ₹15 run fee replaces delivery + small-cart fees. Remote campuses get delivery for the first time."],
-    ["2", "Run Captain AI + Wing Pods", "An agent on Swiggy MCP turns \"dinner for 4 under ₹900, 1 non-veg\" into a cart, pools the hostel wing and splits the bill over UPI."],
-    ["3", "Drop Points + Campus Captains", "An OTP shelf at the gate or hostel, run by a paid student gig. Riders never enter hostels, which matches the safety rules campuses are already setting."],
-    ["4", "The ecosystem rides along", "Instamart snacks join the same run. Dineout handles weekend outings (20% student offer). Campus Streaks and Student Rewards fill the slots."],
+    ["1", "Scheduled Runs", "Timed to when GIM orders: dinner 86%, late night 74%, evening 45%. Lunch (34%) was dropped after our survey. A ₹15 run fee replaces delivery and small-cart fees."],
+    ["2", "Run Captain AI + Wing Pods", "An agent on Swiggy MCP turns \"dinner for 4 under ₹900, 1 non-veg\" into a cart and splits it over UPI. 77% want wing pooling; 56% want the AI planner."],
+    ["3", "Drop Points + Campus Captains", "An OTP shelf at the gate or hostel, run by a paid student gig. 61% asked for it. Riders never enter hostels, matching campus safety rules."],
+    ["4", "The ecosystem rides along", "Instamart snacks join the same run (71% want this). 46% would order EatRight meals regularly. Dineout handles weekend outings; Campus Streaks fills the slots."],
   ];
   pillars.forEach(([n, t, d], i) => {
     const x = 0.45 + (i % 2) * 4.12, y = 2.72 + Math.floor(i / 2) * 2.02;
@@ -190,7 +188,7 @@ pres.addSection({ title: "Proposed Solution" });
     { text: "CampusRun turns campus delivery from one-order-one-rider into one-run-many-orders.", options: { color: INK2 } },
   ], { x: 9.02, y: 5.32, w: 3.7, h: 1.3, fontSize: 10.5 });
 
-  source(s, "Sources: Swiggy Campus Streaks release (PR Newswire, Sep 2025); Swiggy Student Rewards (Tribune / UNI); Swiggy EatRight campus growth (Mediainfoline, Nov 2025); Swiggy MCP launch (Swiggy corporate, Jan 2026) and Builders Club docs.");
+  source(s, "Feature demand: GIM student survey (n = 173). Sources: Swiggy Campus Streaks release (PR Newswire, Sep 2025); Swiggy Student Rewards (Tribune / UNI); Swiggy EatRight campus growth (Mediainfoline, Nov 2025); Swiggy MCP launch (Swiggy corporate, Jan 2026) and Builders Club docs.");
   s.addNotes("Solution. CampusRun adds a scheduled, batched fulfilment mode for campuses Swiggy tags remote or gated. It reuses existing Swiggy assets: Campus Streaks (4,800+ campuses in 310 cities, Sep 2025), Student Rewards (3 lakh+ enrolments), Dineout student offer (20% off bills over Rs 799), Instamart, and Swiggy MCP (Food, Instamart, Dineout servers). Run Captain is an AI agent built on the live Swiggy MCP tools (OAuth 2.1 sign-in): Food get_addresses, search_restaurants, get_restaurant_menu, update_food_cart, get_food_cart, place_food_order, track_food_order; Instamart search_products, update_cart; Dineout search_restaurants_dineout, get_available_slots, book_table.");
 }
 
@@ -244,9 +242,9 @@ pres.addSection({ title: "User Journey" });
 // ======================= SLIDE 4 · BUSINESS IMPACT =======================
 pres.addSection({ title: "Business Impact" });
 {
-  const s = slide("Business Impact", "04 · BUSINESS IMPACT", "Batching makes a 30 km campus profitable: ₹26 contribution per order, break-even at 19 orders a run");
+  const s = slide("Business Impact", "04 · BUSINESS IMPACT", "Batching makes a 30 km campus pay at a ₹230 student basket: ₹15 contribution per order, break-even at 23 a run");
 
-  const kpis = [["₹26", "contribution per order", "remote run, 30 orders"], ["19", "orders to break even", "per run, capacity 40"], ["₹48", "saved per student order", "at gated campuses"]];
+  const kpis = [["₹15", "contribution per order", "remote run, 30 orders"], ["23", "orders to break even", "per run, capacity 40"], ["₹48", "saved per student order", "at gated campuses"]];
   kpis.forEach(([n, l, sub], i) => {
     const x = 0.45 + i * 2.13;
     box(s, x, 1.6, 2.0, 1.25, i === 0 ? SOFT : GREY);
@@ -255,35 +253,35 @@ pres.addSection({ title: "Business Impact" });
     txt(s, sub, { x: x + 0.18, y: 2.52, w: 1.75, h: 0.25, fontSize: 9, color: MUTED });
   });
 
-  const cats = ["Commission (18% of ₹300)", "Run fee", "Platform fee", "Vehicle (₹1,100 ÷ 30)", "Student incentive", "Payment gateway", "Campus Captain", "Contribution"];
+  const cats = ["Commission (18% of ₹230)", "Run fee", "Platform fee", "Vehicle (₹1,100 ÷ 30)", "Student incentive", "Payment gateway", "Campus Captain", "Contribution"];
   s.addChart(pres.charts.BAR, [
-    { name: "Revenue", labels: cats, values: [54, 15, 15, 0, 0, 0, 0, 0] },
-    { name: "Cost", labels: cats, values: [0, 0, 0, 37, 10, 6, 5, 0] },
-    { name: "Contribution", labels: cats, values: [0, 0, 0, 0, 0, 0, 0, 26] },
+    { name: "Revenue", labels: cats, values: [41.4, 15, 15, 0, 0, 0, 0, 0] },
+    { name: "Cost", labels: cats, values: [0, 0, 0, 36.7, 10, 4.6, 5, 0] },
+    { name: "Contribution", labels: cats, values: [0, 0, 0, 0, 0, 0, 0, 15.1] },
   ], {
     x: 0.45, y: 3.0, w: 6.25, h: 3.72, barDir: "bar", barGrouping: "stacked", objectName: "unit-economics-chart",
-    showTitle: true, title: "Per-order economics, remote run (₹): revenue 84 − cost 58 = 26", titleFontSize: 11, titleColor: HEX.ink, titleFontFace: "+mn-lt",
+    showTitle: true, title: "Per-order economics, remote run (₹): revenue 71.4 − cost 56.3 = 15.1", titleFontSize: 11, titleColor: HEX.ink, titleFontFace: "+mn-lt",
     chartColors: [HEX.orange, HEX.ink2, HEX.green],
-    showValue: true, dataLabelPosition: "inEnd", dataLabelFontSize: 10, dataLabelColor: "FFFFFF", dataLabelFontFace: "+mn-lt", dataLabelFormatCode: "#,##0;-#,##0;;",
+    showValue: true, dataLabelPosition: "inEnd", dataLabelFontSize: 10, dataLabelColor: "FFFFFF", dataLabelFontFace: "+mn-lt", dataLabelFormatCode: "#,##0.#;-#,##0.#;;",
     catAxisLabelColor: HEX.ink2, catAxisLabelFontSize: 9.5, catAxisLabelFontFace: "+mn-lt", catAxisOrientation: "maxMin", catAxisLineShow: false,
     valAxisHidden: true, valGridLine: { style: "none" }, catGridLine: { style: "none" },
     showLegend: true, legendPos: "b", legendFontSize: 9, legendColor: HEX.ink2, legendFontFace: "+mn-lt", barGapWidthPct: 40,
   });
 
   // scale table
-  txt(s, "Scale path (3 runs a day, 30 orders a run, ₹300 AOV, 300 days)", { x: 7.0, y: 1.6, w: 5.9, h: 0.3, fontSize: 12, bold: true });
+  txt(s, "Scale path (3 runs a day, 30 orders a run, ₹230 AOV, 300 days)", { x: 7.0, y: 1.6, w: 5.9, h: 0.3, fontSize: 12, bold: true });
   const hdr = { bold: true, color: WHITE, fill: { color: INK }, fontSize: 10 };
   const rows = [
     [{ text: "Stage", options: hdr }, { text: "Campuses", options: { ...hdr, align: "right" } }, { text: "Orders / yr", options: { ...hdr, align: "right" } }, { text: "GOV / yr", options: { ...hdr, align: "right" } }, { text: "Contribution", options: { ...hdr, align: "right" } }],
-    ["Pilot (Goa, 90 days)", "3", "0.8 L", "₹2.4 Cr", "₹0.2 Cr"],
-    ["Phase 2 (months 4–9)", "50", "13.5 L", "₹40.5 Cr", "₹3.6 Cr"],
-    ["Year 1", "150", "40.5 L", "₹121.5 Cr", "₹10.7 Cr"],
-    ["Year 3", "1,000", "270 L", "₹810 Cr", "₹71 Cr"],
+    ["Pilot (Goa, 90 days)", "3", "0.8 L", "₹1.9 Cr", "₹0.1 Cr"],
+    ["Phase 2 (months 4–9)", "50", "13.5 L", "₹31.1 Cr", "₹2.0 Cr"],
+    ["Year 1", "150", "40.5 L", "₹93.2 Cr", "₹6.1 Cr"],
+    ["Year 3", "1,000", "270 L", "₹621 Cr", "₹40.9 Cr"],
   ].map((r, i) => i === 0 ? r : r.map((c, j) => ({ text: c, options: { fontSize: 10, align: j ? "right" : "left", color: INK, bold: i === 4, fill: { color: i % 2 ? WHITE : GREY } } })));
   s.addTable(rows, { x: 7.0, y: 1.98, w: 5.88, colW: [1.9, 0.9, 1.0, 1.04, 1.04], rowH: 0.34, border: { type: "none" }, margin: [0.03, 0.08, 0.03, 0.08], valign: "middle", objectName: "scale-table" });
-  txt(s, "1,000 campuses is about a fifth of the 4,800+ already in Campus Streaks.", { x: 7.0, y: 3.74, w: 5.9, h: 0.25, fontSize: 9, color: MUTED, italic: true });
+  txt(s, "Demand check: the survey implies 1.7 orders per student a week. Even at half that, ~600 hostel residents fill 3 runs a day.", { x: 7.0, y: 3.72, w: 5.9, h: 0.4, fontSize: 9, color: MUTED, italic: true });
 
-  txt(s, "Impact beyond the P&L", { x: 7.0, y: 4.08, w: 5.9, h: 0.3, fontSize: 12, bold: true });
+  txt(s, "Impact beyond the P&L", { x: 7.0, y: 4.2, w: 5.9, h: 0.3, fontSize: 12, bold: true });
   const imp = [
     ["New demand", "Orders from campuses that cannot order on-demand today are incremental, not cannibalised."],
     ["Frequency & habit", "Three predictable slots a day plus pooling make ordering a routine, which Campus Streaks then rewards."],
@@ -291,14 +289,14 @@ pres.addSection({ title: "Business Impact" });
     ["Fleet efficiency", "One loaded trip replaces up to 30 single-order trips and the queue at the gate."],
   ];
   imp.forEach(([t, d], i) => {
-    const y = 4.45 + i * 0.57;
+    const y = 4.55 + i * 0.55;
     s.addShape(pres.shapes.OVAL, { x: 7.0, y: y + 0.1, w: 0.22, h: 0.22, fill: { color: i === 0 ? ORANGE : GREEN }, line: { width: 0, color: WHITE }, objectName: oid("dot") });
     txt(s, t, { x: 7.35, y, w: 1.55, h: 0.5, fontSize: 10.5, bold: true, valign: "middle" });
     txt(s, d, { x: 8.9, y, w: 3.98, h: 0.5, fontSize: 9.5, color: INK2, valign: "middle" });
   });
 
-  source(s, "All economics are planning assumptions (commission 18%, platform fee ₹15 ex-GST, vehicle ₹1,100 per 60 km round trip) for the pilot to check against Swiggy's actual data. Live model: prototype/ops.html.");
-  s.addNotes("Unit economics (remote run, 30 orders, AOV Rs 300): revenue per order = commission 54 + run fee 15 + platform fee 15 = Rs 84. Costs per order = vehicle 37 (Rs 1,100 round trip / 30) + incentive 10 + gateway 6 + captain 5 = Rs 58. Contribution Rs 26 per order, Rs 790 per run. Break-even = (1,100 + 150) / (84 - 16) = 18.4, so 19 orders per run. Gated campus: the student pays Rs 32.58 in fees instead of Rs 80.58 (Rs 38 delivery + Rs 25 small-cart + Rs 17.58 platform), saving Rs 48. Swiggy gives up fee revenue there but replaces per-order rider cost with a batched trip (Rs 450 / 25 = Rs 18 per order); the pilot measures the net effect against Swiggy's real on-demand cost. Use the sliders in prototype/ops.html during Q&A.");
+  source(s, "AOV ₹230 from the GIM survey (mean ₹229). Other inputs are planning assumptions (commission 18%, platform fee ₹15 ex-GST, vehicle ₹1,100 per 60 km round trip) for the pilot to check. Live model: prototype/ops.html.");
+  s.addNotes("Unit economics (remote run, 30 orders, AOV Rs 230 = GIM survey mean per-person basket of Rs 229): revenue per order = commission 41.4 + run fee 15 + platform fee 15 = Rs 71.4. Costs per order = vehicle 36.7 (Rs 1,100 round trip / 30) + incentive 10 + gateway 4.6 + captain 5 = Rs 56.3. Contribution Rs 15.1 per order, Rs 454 per run. Break-even = (1,100 + 150) / (71.4 - 4.6 - 10) = 22.0, so 23 orders per run. Demand check: survey frequency answers imply 1.73 orders per student per week (3+/week = 3, 1-2/week = 1.5, 2-3/month = 0.6); halving that for intent-to-action, 600 students x 0.87 / 7 = 74 orders a day, i.e. 25 per run across 3 runs. Gated campus: the student pays Rs 32.58 in fees instead of Rs 80.58, saving Rs 48; Swiggy replaces per-order rider cost with a batched trip (Rs 450 / 25 = Rs 18 per order), and the pilot measures the net effect. Use the sliders in prototype/ops.html during Q&A.");
 }
 
 // ======================= SLIDE 5 · EXECUTION =======================
@@ -308,7 +306,7 @@ pres.addSection({ title: "Execution Plan" });
 
   const phases = [
     ["Weeks 0–2", "Set up", "MoUs with GIM + 2 Goa campuses (1 remote, 1 gated). Onboard 12–15 restaurants in 2 clusters. Hire 6 Campus Captains. Install shelves."],
-    ["Weeks 3–10", "Run the pilot", "Start at 2 runs a day, then 3. A/B test slot times, run fee (₹9 vs ₹15) and pod incentives. Run Captain goes live on Swiggy MCP."],
+    ["Weeks 3–10", "Run the pilot", "Start with Dinner + Midnight runs (86% / 74% demand), add the Evening run in week 6. A/B test run fee (₹9 vs ₹15) and pod incentives. Run Captain live on Swiggy MCP."],
     ["Weeks 11–12", "Decide", "Read KPIs against the gates. If met, codify the playbook: campus tagging, cluster maps, Captain hiring kit."],
     ["Months 4–12", "Scale", "50 residential campuses outside metro cores, then 150 by Year 1. Prioritise campuses already in Campus Streaks."],
   ];
@@ -326,7 +324,7 @@ pres.addSection({ title: "Execution Plan" });
   const brow = bud.map(([a, b], i) => [{ text: a, options: { fontSize: 10, color: INK, fill: { color: i % 2 ? WHITE : GREY } } }, { text: b, options: { fontSize: 10, align: "right", color: INK, fill: { color: i % 2 ? WHITE : GREY } } }]);
   brow.push([{ text: "Total", options: { bold: true, fontSize: 10.5, color: WHITE, fill: { color: INK } } }, { text: "≈ ₹10.3 L", options: { bold: true, fontSize: 10.5, align: "right", color: WHITE, fill: { color: INK } } }]);
   s.addTable(brow, { x: 0.45, y: 4.05, w: 3.9, colW: [2.85, 1.05], rowH: 0.32, border: { type: "none" }, margin: [0.03, 0.08, 0.03, 0.08], valign: "middle", objectName: "budget-table" });
-  txt(s, "Run revenue at 25 orders a run is about ₹13 L, so the pilot pays for itself once it hits the fill target.", { x: 0.45, y: 6.05, w: 3.9, h: 0.6, fontSize: 9.5, color: GREEN, bold: true });
+  txt(s, "Run revenue at 25 orders a run is about ₹11.4 L, so the pilot pays for itself once it hits the fill target.", { x: 0.45, y: 6.05, w: 3.9, h: 0.6, fontSize: 9.5, color: GREEN, bold: true });
 
   // risks
   txt(s, "Risks & mitigations", { x: 4.6, y: 3.7, w: 4.6, h: 0.3, fontSize: 12, bold: true });
@@ -347,7 +345,7 @@ pres.addSection({ title: "Execution Plan" });
   // metrics
   box(s, 9.45, 3.7, 3.43, 3.0, INK);
   txt(s, "GO / NO-GO GATES (WEEK 12)", { x: 9.65, y: 3.82, w: 3.1, h: 0.25, fontSize: 9.5, bold: true, color: ORANGE, charSpacing: 1 });
-  const kp = [["≥ 25", "orders per run (fill ≥ 60%)"], ["≥ 90%", "runs at the drop point on time"], ["≥ ₹20", "contribution per order"], ["≥ 3", "orders per active student per month"], ["≥ 30%", "of remote-campus buyers new to Swiggy"], ["≥ 50", "NPS from students and campus admin"]];
+  const kp = [["≥ 25", "orders per run (break-even 23)"], ["≥ 90%", "runs at the drop point on time"], ["≥ ₹15", "contribution per order"], ["≥ 3", "orders per active student per month"], ["≥ 30%", "of remote-campus buyers new to Swiggy"], ["≥ 50", "NPS from students and campus admin"]];
   kp.forEach(([n, l], i) => {
     const y = 4.14 + i * 0.42;
     txt(s, n, { x: 9.65, y, w: 0.95, h: 0.38, fontSize: 13, bold: true, color: WHITE, valign: "middle" });
@@ -355,7 +353,7 @@ pres.addSection({ title: "Execution Plan" });
   });
 
   source(s, "Dependencies: campus MoUs · scheduled + batch dispatch · MCP OAuth for Run Captain · UPI collect. Costs: team estimates (GIM 2 runs/day at ₹1,100; 2 gated campuses 3 runs/day at ₹450).");
-  s.addNotes("Execution. Pilot cost: vehicles = GIM 2 runs/day x 80 days x Rs 1,100 (Rs 1.76 L) + 2 gated campuses x 3 runs/day x 80 days x Rs 450 (Rs 2.16 L) = Rs 3.9 L; Captains Rs 150 x 640 runs = Rs 0.96 L; shelves, crates and signage Rs 0.9 L; incentives and marketing Rs 2.0 L; tech Rs 2.5 L. Total about Rs 10.3 L. Revenue at 25 orders/run: 640 runs x 25 x about Rs 81 = about Rs 13 L. Gates: fill of 25+ per run, on-time 90%+, contribution Rs 20+ per order, 3+ orders per active student per month, 30%+ new-to-Swiggy at remote campuses, NPS 50+.");
+  s.addNotes("Execution. Pilot cost: vehicles = GIM 2 runs/day x 80 days x Rs 1,100 (Rs 1.76 L) + 2 gated campuses x 3 runs/day x 80 days x Rs 450 (Rs 2.16 L) = Rs 3.9 L; Captains Rs 150 x 640 runs = Rs 0.96 L; shelves, crates and signage Rs 0.9 L; incentives and marketing Rs 2.0 L; tech Rs 2.5 L. Total about Rs 10.3 L. Revenue at 25 orders/run: 640 runs x 25 x Rs 71.4 = about Rs 11.4 L. Slot order follows the GIM survey: dinner 86%, late night 74%, evening snacks 45%, lunch 34%. Gates: fill of 25+ per run (break-even 23), on-time 90%+, contribution Rs 15+ per order, 3+ orders per active student per month, 30%+ new-to-Swiggy at remote campuses, NPS 50+.");
 }
 
 (async () => {

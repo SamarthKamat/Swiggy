@@ -26,8 +26,9 @@ window.DEMO = {
     },
   },
 
+  // Slot times follow the GIM survey (n = 173): dinner 86%, late night 74%, evening snacks 45%, lunch 34%.
   slots: [
-    { id: "lunch", label: "Lunch Run", time: "1:15 PM", closesMin: 45, cluster: "Mapusa–Bicholim", capacity: 40, hub: { latitude: 15.5915, longitude: 73.8091 } },
+    { id: "evening", label: "Evening Run", time: "5:45 PM", closesMin: 45, cluster: "Mapusa–Bicholim", capacity: 40, hub: { latitude: 15.5915, longitude: 73.8091 } },
     { id: "dinner", label: "Dinner Run", time: "8:30 PM", closesMin: 45, cluster: "Panaji–Porvorim", capacity: 40, hub: { latitude: 15.4909, longitude: 73.8278 } },
     { id: "midnight", label: "Midnight Run", time: "11:45 PM", closesMin: 40, cluster: "Mapusa", capacity: 30, hub: { latitude: 15.5915, longitude: 73.8091 } },
   ],

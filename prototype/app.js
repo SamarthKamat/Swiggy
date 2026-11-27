@@ -213,7 +213,7 @@
     const nonVeg = n(/(\d+)\s*non[- ]?veg/);
     const allVeg = /\bveg\b/.test(t.replace(/non[- ]?veg/g, "")) && nonVeg == null;
     const hit = ["biryani", "pizza", "thali", "rolls", "momos", "healthy", "protein", "salad", "chinese", "burger"].find((k) => t.includes(k));
-    const query = hit || (S.slot === "midnight" ? "rolls" : S.slot === "lunch" ? "thali" : "biryani");
+    const query = hit || (S.slot === "midnight" ? "rolls" : S.slot === "evening" ? "momos" : "biryani");
     return { people, budget, nonVeg: allVeg ? 0 : nonVeg == null ? people : Math.min(nonVeg, people), allVeg, query };
   }
 

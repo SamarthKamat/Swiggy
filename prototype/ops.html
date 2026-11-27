@@ -51,7 +51,7 @@
       <div class="panel">
         <h3>Run assumptions</h3>
         <div id="sliders"></div>
-        <div class="note">All inputs are planning assumptions to be checked in the pilot. Commission and platform fee are conservative stand-ins, not Swiggy's actual numbers.</div>
+        <div class="note">Average order value defaults to the GIM survey basket (₹229, n = 173). Other inputs are planning assumptions for the pilot to check; commission and platform fee are conservative stand-ins, not Swiggy's actual numbers.</div>
       </div>
       <div>
         <div class="kpis">
@@ -85,8 +85,8 @@
 
 <script>
 const PRESETS = {
-  remote: { orders: 30, aov: 300, comm: 18, runFee: 15, platform: 15, vehicle: 1100, captain: 150, pg: 2, incentive: 10, odDelivery: 0, odSmall: 0, label: "Vehicle round trip (≈60 km)" },
-  gated:  { orders: 25, aov: 280, comm: 18, runFee: 15, platform: 15, vehicle: 450,  captain: 150, pg: 2, incentive: 10, odDelivery: 38, odSmall: 25, label: "Rider batch trip (≈6 km)" },
+  remote: { orders: 30, aov: 230, comm: 18, runFee: 15, platform: 15, vehicle: 1100, captain: 150, pg: 2, incentive: 10, odDelivery: 0, odSmall: 0, label: "Vehicle round trip (≈60 km)" },
+  gated:  { orders: 25, aov: 230, comm: 18, runFee: 15, platform: 15, vehicle: 450,  captain: 150, pg: 2, incentive: 10, odDelivery: 38, odSmall: 25, label: "Rider batch trip (≈6 km)" },
 };
 const DEFS = [
   ["orders", "Orders per run", 8, 60, 1, ""],

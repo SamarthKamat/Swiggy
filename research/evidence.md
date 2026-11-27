@@ -4,6 +4,26 @@ Team Syntara · Goa Institute of Management · Swiggy Food for Thought 2.0
 
 Every number in the deck traces to a row below. The facts were gathered from web search results in Nov 2026. **Open each link and confirm the exact wording before you submit**: some pages are news re-prints, and a few figures carry caveats, noted in the last column.
 
+## 0. Primary research: GIM student survey
+
+Google Form, n = 173 GIM students (PGDM Core 82, BDA 48, BIFS 22, HCM 21; 92% in campus hostels), collected 26–27 Nov 2026. Raw export: `survey/GIM_Swiggy_CampusRun_Survey_Responses.csv`; computed results: `survey/results.json` (`python3 research/survey/analyze.py`).
+
+| Finding | Value | Used in |
+|---|---|---|
+| Failed or abandoned a campus order | 80% (50% "unserviceable", 31% abandoned over fees) | Slide 1 |
+| Ordered but hit gate wait or hassle | 15% | Notes |
+| Median walk + wait at the gate | 15–20 min (57% spend 15+ min) | Slide 1 |
+| Would order from a fixed slot to save ₹40+ | 79% (50% "definitely") | Slide 1 |
+| Average per-person basket (bucket midpoints) | ₹229, used as AOV ₹230 | Slides 1, 4 |
+| Biggest frustration | Gate pickup 45%, fees 34%, group coordination 15%, cold food 7% | Slide 1 |
+| Why order outside the mess | Mess fatigue 81%, late-night hunger 74%, group hangouts 65%, cuisine/healthy cravings 49% | Slide 1 |
+| Ordering windows | Dinner 86%, late night 74%, evening snacks 45%, lunch 34% | Slides 2, 5: lunch slot replaced by evening |
+| Feature pull | Wing pooling + UPI split 77%, Instamart add-ons 71%, OTP drop shelf 61%, AI planner 56%, Dineout offers 46% | Slide 2 |
+| Weekly users if launched | 80% (stated 1.73 orders per student a week) | Slide 4 demand check |
+| Would order healthy / EatRight meals regularly | 46% (83% at least occasionally) | Slide 2 |
+
+**How the research changed the solution:** (1) the third run moved from lunch (34%) to evening snacks (45%), and the pilot starts with dinner and midnight; (2) AOV came down from an assumed ₹300 to the surveyed ₹230, so the unit economics were rebuilt (₹15 per order, break-even 23); (3) wing pooling and the OTP shelf were confirmed as core features, not add-ons.
+
 ## 1. Scale of the problem: where Indian students study
 
 | Fact used in deck | Source | Caveat |
